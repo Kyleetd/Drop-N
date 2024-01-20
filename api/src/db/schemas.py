@@ -1,8 +1,10 @@
+from datetime import date, datetime
+
 from typing import Annotated
 
 from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
+from pydantic import BaseModel, dataclasses
 
 app = FastAPI()
 
@@ -10,18 +12,18 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 class UserBase(BaseModel):
-    email: str | None = None
+    email: str
     first_name: str
     last_name: str
 
 class User(UserBase):
-    
+    id: int
+    phone_number: int 
 
 class CreateUser(User):
     hashed_password: str
 
-class GetUser(User):
-
+# class LeagueBase(BaseModel):
 
 
 # def fake_decode_token(token):
