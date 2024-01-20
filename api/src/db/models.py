@@ -52,7 +52,7 @@ class Purchase(Base):
     event_id = Column(Integer, ForeignKey('events.id'), index=True)
 
     payment_method = Column(Enum('visa', 'mastercard', 'cash'))
-    type_of_purchase = Column(Enum('league', 'event'))
+    purchase_type = Column(Enum('league', 'event'))
 
     # Define relationships
     league = relationship("League", back_populates="purchases")
