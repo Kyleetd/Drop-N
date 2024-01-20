@@ -1,9 +1,16 @@
+from argon2 import hash_password
 from sqlalchemy.orm import Session
 
 from . import models, schemas
 
 def login(db: Session, email: str, password: str):
     return db.query(models.User).filter(models.User.email == email and models.User.hashed_password == password).first()
+
+def create_user(db: Session, user: schemas.User):
+    hashed_password = hash_password(user.password)
+    new_user = models.User(first_name=user.first_name, last_name=user.last_name, email=user.email, hashed_password=hashed_password, phone_number=user.phone_number)
+    return new_user
+
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
