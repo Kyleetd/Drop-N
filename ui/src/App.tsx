@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
+import Button from '@mui/material/Button';
 import './App.css';
 
 function App() {
@@ -8,16 +9,27 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Welcome to UBC Volleyball Club's Drop'n Platform!
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
+
+        <Button 
+          variant="contained" 
+          color="primary"
+          href="https://example.com"
           target="_blank"
           rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        >I'm registered</Button>
+
+        <Button 
+          variant="contained" 
+          color="primary"
+          href="https://example.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >I'm drop'n in</Button>
+
+
+
       </header>
     </div>
   );
