@@ -64,7 +64,7 @@ function Landing() {
           <Button 
             variant="contained" 
             color="primary"
-            href="https://example.com"
+            href="/new-user"
             target="_blank"
             rel="noopener noreferrer"
           >
