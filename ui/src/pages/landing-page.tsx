@@ -29,7 +29,7 @@ function Landing(props: any) {
 
     try {
       // Make a POST request using the fetch API
-      const response = await fetch("http://localhost:8000/user", {
+      const response = await fetch("http://localhost:8001/user", {
         method: "Post",
         headers: {
           "Content-Type": "application/json",
