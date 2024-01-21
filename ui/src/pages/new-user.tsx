@@ -4,6 +4,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 export default function FormPropsTextFields() {
@@ -11,8 +13,11 @@ export default function FormPropsTextFields() {
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [phone_number, setPhoneNumber] = React.useState<string | null>(null);
+  const [phone_number, setPhoneNumber] = React.useState<number | null>(null);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
+  const [apiError, setApiError] = React.useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -32,7 +37,15 @@ export default function FormPropsTextFields() {
         setPassword(value);
         break;
       case "phone_number":
-        setPhoneNumber(value);
+        const phoneNumberValue = parseInt(value, 10);
+
+        // Check if the conversion is successful (not NaN)
+        if (!isNaN(phoneNumberValue)) {
+          setPhoneNumber(phoneNumberValue);
+        } else {
+          // Handle the case where the input is not a valid number
+          setPhoneNumber(null);
+        }
         break;
     }
   };
@@ -71,15 +84,18 @@ export default function FormPropsTextFields() {
       // Check if the request was successful (status code 2xx)
       if (response.ok) {
         const responseData = await response.json();
-        // Handle the response as needed
         console.log("User created successfully:", responseData);
+        setApiError(null);
+        navigate("/dashboard");
       } else {
         // Handle non-successful responses
         console.error("Error creating user:", response.statusText);
+        setApiError("Error creating user. Please try again.");
       }
     } catch (error) {
       // Handle errors
       console.error("Error creating user:", (error as Error).message);
+      setApiError("Error creating user. Please try again.");
     }
   };
 
@@ -97,14 +113,17 @@ export default function FormPropsTextFields() {
         }}
       >
         <CssBaseline />
+        {apiError && <Alert severity="error">{apiError}</Alert>}
         <Paper
           elevation={3}
           sx={{
-            padding: 8,
+            padding: 5,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             borderRadius: 8,
+            backgroundColor: "#ededed",
+            border: "25px solid #5950c6",
             "& .MuiTextField-root": { m: 1, width: "25ch" },
           }}
           component="form"
@@ -150,7 +169,7 @@ export default function FormPropsTextFields() {
             required
             id="phone_number"
             label="Phone Number (Optional)"
-            value={phone_number || ""}
+            value={phone_number}
             onChange={handleInputChange}
             variant="filled"
           />
