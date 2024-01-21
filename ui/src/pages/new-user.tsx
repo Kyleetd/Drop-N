@@ -76,7 +76,7 @@ const FormPropsTextFields: React.FC<{
       };
 
       // Make a POST request
-      const response = await fetch("http://localhost:8000/user/new", {
+      const response = await fetch("http://localhost:8001/user/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

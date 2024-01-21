@@ -22,10 +22,10 @@ function Landing(props: any) {
     // Prepare data to be sent in the POST request
     const formData = JSON.stringify({
       email: email,
-      password: password
-    })
+      password: password,
+    });
 
-    console.log(formData)
+    console.log(formData);
 
     try {
       // Make a POST request using the fetch API
@@ -34,12 +34,12 @@ function Landing(props: any) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: formData
+        body: formData,
       });
-      
+
       if (response.ok) {
         // Handle the response (e.g., redirect to dashboard on success)
-        console.log()
+        console.log();
         const responseData = await response.json();
         console.log(responseData);
         navigate("/dashboard");
@@ -52,17 +52,17 @@ function Landing(props: any) {
       console.error("Login failed", error);
       setError("An unexpected error occurred.");
     }
-};
+  };
 
   return (
     <div className="App">
       <header className="App-header">
-        {/* {error && (
+        {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             {error}
           </Alert>
-        )} */}
+        )}
         <img src={logo} alt="logo" width={150} />
         <p>Welcome to UBC Volleyball Club's Drop'n Platform!</p>
 
