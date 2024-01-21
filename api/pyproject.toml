@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "api"
+name = "src"
 version = "0.1.0"
 description = ""
 authors = ["kylee <kyleetd@students.cs.ubc.ca>"]
@@ -8,8 +8,8 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 fastapi = "^0.109.0"
-uvicorn = {extras = ["standard"], version = "^0.26.0"}
 sqlalchemy = "^2.0.25"
+uvicorn = "^0.26.0"
 
 
 [build-system]
