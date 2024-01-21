@@ -46,6 +46,7 @@ models.Base.metadata.create_all(bind=engine)
 @app.post("/user")
 async def login(email: str, password: str, db: Session = Depends(get_db)):
     user = crud.login(db, email, password)
+    print(user)
     return user
 
 ## Create new user

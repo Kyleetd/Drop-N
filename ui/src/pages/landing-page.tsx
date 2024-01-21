@@ -21,10 +21,10 @@ function Landing() {
 
     if (email && password) {
       // Prepare data to be sent in the POST request
-      const formData = {
+      const formData = JSON.stringify({
         email: email,
         password: password,
-      };
+      });
 
       try {
         // Make a POST request using the fetch API
@@ -33,11 +33,12 @@ function Landing() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: formData,
         });
 
         if (response.ok) {
           // Handle the response (e.g., redirect to dashboard on success)
+          console.log("HERHERERE")
           const responseData = await response.json();
           console.log(responseData);
           navigate("/dashboard");
