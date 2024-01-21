@@ -12,7 +12,6 @@ class User(Base):
     last_name = Column(String)
     email = Column(String)
     hashed_password = Column(String)
-    birthday = Column(Date)
     phone_number = Column(int)
     
 
