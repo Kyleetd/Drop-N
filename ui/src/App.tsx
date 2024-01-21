@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import logo from './logo.png';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField'; // Import TextField
 import './App.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+// import UserState from "./State/UserState";
+// import ResponsePopups from "./State/ResponsePopups";
+import Landing from "./pages/landing-page"
+import UserDashboard from "./pages/UserDashboard"
+
 
 function App() {
   // State to store user input
@@ -17,62 +20,18 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} alt="logo" width={150}/>
-        <p>
-          Welcome to UBC Volleyball Club's Drop'n Platform!
-        </p>
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <TextField
-              label="Username"
-              variant="outlined"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoFocus={true}
-              InputLabelProps={{
-                style: { color: '#1976d2' },
-              }}
-              InputProps={{
-                style: { color: 'white' },
-              }}
-            />
-            <TextField
-              label="Password"
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              InputLabelProps={{
-                style: { color: '#1976d2' },
-              }}
-              InputProps={{
-                style: { color: 'white' },
-              }}
-            />
-            <Button 
-              type="submit"
-              variant="contained" 
-              color="primary"
-            >
-              Login
-            </Button>
-          </div>
+    // <ResponsePopups>
+    //   <UserState>
+        <Router>
+          <Routes>
+            <Route path="/" Component={Landing}/>
+            <Route path="/dashboard" Component={UserDashboard}/>
+          </Routes>
+        </Router>
+    //   </UserState>
+    // </ResponsePopups>
 
-          <Button 
-            variant="contained" 
-            color="primary"
-            href="https://example.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Register for Drop'n
-          </Button>
-        </form>
-      </header>
-    </div>
   );
 }
 
