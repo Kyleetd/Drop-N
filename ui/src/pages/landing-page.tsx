@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from '../logo.png';
+import logo from '../dropn-logo-dark.png';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import '../App.css';
@@ -21,7 +21,7 @@ function Landing() {
       <header className="App-header">
         <img src={logo} alt="logo" width={150}/>
         <p>
-          Welcome to UBC Volleyball Club's Drop'n Platform!
+          Welcome to UBC Volleyball Club!
         </p>
 
         <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
