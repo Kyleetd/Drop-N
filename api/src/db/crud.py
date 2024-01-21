@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 def login(db: Session, email: str, password: str):
-    return db.query(models.User).filter(models.User.email == email and models.User.hashed_password == password).first()
+    return db.query(models.User).filter(models.User.email == email and models.User.password == password).first()
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -15,7 +15,7 @@ def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
-    user.hashed_password = user.hashed_password + "notreallyhashed"
+    user.password = user.password + "notreallyhashed"
     db_user = models.User(**user.model_dump())
     db.add(db_user)
     db.commit()
@@ -24,8 +24,8 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def update_user(db: Session, user: schemas.UserCreate):
     db_user = db.query(models.User).filter(models.User.id == user.id).first()
-    if user.hash_password not in [None, ""]:
-        db_user.hash_password = user.hash_password + "notreallyhashed"
+    if user.password not in [None, ""]:
+        db_user.password = user.password + "notreallyhashed"
     if user.first_name not in [None, ""]:
         db_user.first_name = user.first_name
     if user.last_name not in [None, ""]:

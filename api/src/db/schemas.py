@@ -21,17 +21,17 @@ class User(UserBase):
     last_name: str
 
 class UserCreate(UserBase):
-    email: str
     first_name: str
     last_name: str
-    hashed_password: str
+    email: str
+    password: str
 
 class UserUpdate(UserBase):
     id: int
     email: str | None = None
     first_name: str | None = None
     last_name: str | None = None
-    hashed_password: str | None = None
+    password: str | None = None
 
 
 
