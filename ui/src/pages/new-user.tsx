@@ -11,6 +11,7 @@ export default function FormPropsTextFields() {
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [phone_number, setPhoneNumber] = React.useState<string | null>(null);
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(true);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,9 @@ export default function FormPropsTextFields() {
       case "password":
         setPassword(value);
         break;
+      case "phone_number":
+        setPhoneNumber(value);
+        break;
     }
   };
 
@@ -42,9 +46,41 @@ export default function FormPropsTextFields() {
     setIsButtonDisabled(!areRequiredFieldsFilled);
   }, [firstName, lastName, email, password]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Add your form submission logic here
+
+    try {
+      // Prepare data to be sent in the POST request
+      const formData = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+        phone_number: phone_number,
+      };
+
+      // Make a POST request
+      const response = await fetch("/user/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Check if the request was successful (status code 2xx)
+      if (response.ok) {
+        const responseData = await response.json();
+        // Handle the response as needed
+        console.log("User created successfully:", responseData);
+      } else {
+        // Handle non-successful responses
+        console.error("Error creating user:", response.statusText);
+      }
+    } catch (error) {
+      // Handle errors
+      console.error("Error creating user:", (error as Error).message);
+    }
   };
 
   return (
@@ -114,6 +150,7 @@ export default function FormPropsTextFields() {
             required
             id="phone_number"
             label="Phone Number (Optional)"
+            value={phone_number || ""}
             onChange={handleInputChange}
             variant="filled"
           />
