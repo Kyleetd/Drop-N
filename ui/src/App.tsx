@@ -1,35 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import logo from './logo.png';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField'; // Import TextField
 import './App.css';
 
 function App() {
+  // State to store user input
+  const [username, setUsername] = useState('');
+
+  // Handler for when the user submits the form
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); // Prevents the default form submit action
+    console.log(username); // Here you'd handle the login logic
+    // Redirect to user dashboard or show login error as needed
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo} alt="logo" width={150}/>
         <p>
           Welcome to UBC Volleyball Club's Drop'n Platform!
         </p>
 
-        <Button 
-          variant="contained" 
-          color="primary"
-          href="https://example.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >I'm registered</Button>
+        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <TextField
+              label="Username"
+              variant="outlined"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              autoFocus={true}
+              InputLabelProps={{
+                style: { color: '#185a9e' },
+              }}
+              InputProps={{
+                style: { color: 'white' }, // Customize text color
+              }}
 
-        <Button 
-          variant="contained" 
-          color="primary"
-          href="https://example.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >I'm drop'n in</Button>
+              
+            />
+            <Button 
+              type="submit"
+              variant="contained" 
+              color="primary"
+            >
+              Login
+            </Button>
+          </div>
 
-
-
+          <Button 
+            variant="contained" 
+            color="primary"
+            href="https://example.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Register for Drop'n
+          </Button>
+        </form>
       </header>
     </div>
   );
