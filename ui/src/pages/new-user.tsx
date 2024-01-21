@@ -8,7 +8,10 @@ import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-export default function FormPropsTextFields() {
+const FormPropsTextFields: React.FC<{
+  currentUserId: string | null;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ currentUserId, setCurrentUserId }) => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -186,4 +189,6 @@ export default function FormPropsTextFields() {
       </Container>
     </div>
   );
-}
+};
+
+export default FormPropsTextFields;
