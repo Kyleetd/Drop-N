@@ -7,6 +7,7 @@ import './App.css';
 function App() {
   // State to store user input
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   // Handler for when the user submits the form
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -32,13 +33,24 @@ function App() {
               onChange={(e) => setUsername(e.target.value)}
               autoFocus={true}
               InputLabelProps={{
-                style: { color: '#185a9e' },
+                style: { color: '#1976d2' },
               }}
               InputProps={{
-                style: { color: 'white' }, // Customize text color
+                style: { color: 'white' },
               }}
-
-              
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              InputLabelProps={{
+                style: { color: '#1976d2' },
+              }}
+              InputProps={{
+                style: { color: 'white' },
+              }}
             />
             <Button 
               type="submit"
