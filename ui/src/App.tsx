@@ -17,8 +17,6 @@ function App() {
           path="/"
           element={
             <Landing
-              currentUserId={currentUserId}
-              setCurrentUserId={setCurrentUserId}
             />
           }
         />

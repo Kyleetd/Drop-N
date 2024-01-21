@@ -4,7 +4,7 @@ from . import models, schemas
 
 # Users CRUD
 def login(db: Session, email: str, password: str):
-    return db.query(models.User).filter(models.User.email == email and models.User.password == password).first()
+    return db.query(models.User).filter(models.User.email == email, models.User.password == password).first()
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()

@@ -33,6 +33,10 @@ class UserUpdate(UserBase):
     last_name: str | None = None
     password: str | None = None
 
+class UserCredentials(BaseModel):
+    email: str
+    password: str
+
 # League Schemas
 class LeagueBase(BaseModel):
     description: str | None = None

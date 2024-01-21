@@ -7,10 +7,7 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-const Landing: React.FC<{
-  currentUserId: string | null;
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ currentUserId, setCurrentUserId }) => {
+function Landing(props: any) {
   // State to store user input
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,53 +19,50 @@ const Landing: React.FC<{
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (email && password) {
-      // Prepare data to be sent in the POST request
-      const formData = JSON.stringify({
-        email: email,
-        password: password,
+    // Prepare data to be sent in the POST request
+    const formData = JSON.stringify({
+      email: email,
+      password: password
+    })
+
+    console.log(formData)
+
+    try {
+      // Make a POST request using the fetch API
+      const response = await fetch("http://localhost:8000/user", {
+        method: "Post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: formData
       });
-
-      try {
-        // Make a POST request using the fetch API
-        const response = await fetch("http://localhost:8000/user", {
-          method: "Post",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: formData,
-        });
-
-        if (response.ok) {
-          // Handle the response (e.g., redirect to dashboard on success)
-          console.log("HERHERERE")
-          const responseData = await response.json();
-          console.log(responseData);
-          navigate("/dashboard");
-        } else {
-          const errorData = await response.json();
-          setError(errorData.detail);
-        }
-      } catch (error) {
-        // Handle network or other errors
-        console.error("Login failed", error);
-        setError("An unexpected error occurred.");
+      
+      if (response.ok) {
+        // Handle the response (e.g., redirect to dashboard on success)
+        console.log()
+        const responseData = await response.json();
+        console.log(responseData);
+        navigate("/dashboard");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.detail);
       }
-    } else {
-      // Handle case where email or password is missing
-      setError("Email and password are required");
+    } catch (error) {
+      // Handle network or other errors
+      console.error("Login failed", error);
+      setError("An unexpected error occurred.");
     }
-  };
+};
 
   return (
     <div className="App">
       <header className="App-header">
-        {error && (
+        {/* {error && (
           <Alert severity="error">
             <AlertTitle>Error</AlertTitle>
             {error}
           </Alert>
-        )}
+        )} */}
         <img src={logo} alt="logo" width={150} />
         <p>Welcome to UBC Volleyball Club's Drop'n Platform!</p>
 
@@ -126,6 +120,6 @@ const Landing: React.FC<{
       </header>
     </div>
   );
-};
+}
 
 export default Landing;

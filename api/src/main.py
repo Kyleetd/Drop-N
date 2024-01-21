@@ -2,7 +2,7 @@ from datetime import date, datetime
 from typing import Union, Annotated
 from sqlalchemy.orm import Session
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
 from .db import crud, models, schemas
@@ -44,10 +44,12 @@ models.Base.metadata.create_all(bind=engine)
 
 ## Log user in
 @app.post("/user")
-async def login(email: str, password: str, db: Session = Depends(get_db)):
-    user = crud.login(db, email, password)
-    print(user)
-    return user
+async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_db)):
+    db_user = crud.login(db, email=credentials.email, password=credentials.password)
+    if db_user:
+        return db_user
+    else:
+        raise HTTPException(status_code=422, detail="Invalid login")
 
 ## Create new user
 @app.post("/user/new")
@@ -59,7 +61,7 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @app.put("/user")
 async def update_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     updated_user = crud.update_user(db, user)
-    return update_user
+    return updated_user
 
 ## Get All Users
 @app.get("/users")
