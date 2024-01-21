@@ -52,15 +52,15 @@ export default function FormPropsTextFields() {
     try {
       // Prepare data to be sent in the POST request
       const formData = {
+        phone_number: phone_number,
+        email: email,
         first_name: firstName,
         last_name: lastName,
-        email: email,
         password: password,
-        phone_number: phone_number,
       };
 
       // Make a POST request
-      const response = await fetch("/user/new", {
+      const response = await fetch("http://localhost:8000/user/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
