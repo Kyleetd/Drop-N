@@ -30,7 +30,7 @@ class League(Base):
 class Event(Base):
     __tablename__ = "events"
 
-    id = Column(Integer, primary_key=True, index=True)
+    event_id = Column(Integer, primary_key=True, index=True)
 
     league_id = Column(Integer, ForeignKey('leagues.id'), index=True)
 
@@ -40,11 +40,12 @@ class Event(Base):
 class Purchase(Base):
     __tablename__ = "purchases"
     
-    id = Column(Integer, primary_key=True, index=True)
+    pruchase_id = Column(Integer, primary_key=True, index=True)
 
     user_id = Column(Integer, ForeignKey('users.id'), index=True)
     league_id = Column(Integer, ForeignKey('leagues.id'), index=True)
-    event_id = Column(Integer, ForeignKey('events.id'), index=True)
+    event_id = Column(Integer, ForeignKey('events.event_id'), index=True)
+    date_time = Column(DateTime)
 
-    payment_method = Column(Enum('visa', 'mastercard', 'cash'))
-    purchase_type = Column(Enum('league', 'event'))
+    payment_method = Column(String)
+    purchase_type = Column(String)

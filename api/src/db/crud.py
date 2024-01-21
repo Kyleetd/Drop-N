@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 
+# Users CRUD
 def login(db: Session, email: str, password: str):
     return db.query(models.User).filter(models.User.email == email and models.User.password == password).first()
 
@@ -11,8 +12,8 @@ def get_user(db: Session, user_id: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
+def get_users(db: Session):
+    return db.query(models.User).all()
 
 def create_user(db: Session, user: schemas.UserCreate):
     user.password = user.password + "notreallyhashed"
@@ -36,5 +37,35 @@ def update_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
+# Leagues CRUD
 def create_league(db: Session, league: schemas.LeagueCreate):
-    db_league = db.query(league.model_dump())
+    db_league = models.League(**league.model_dump())
+    db.add(db_league)
+    db.commit()
+    db.refresh(db_league)
+    return db_league
+
+def get_leagues(db: Session):
+    return db.query(models.League).all()
+
+# Events CRUD
+def create_event(db: Session, event: schemas.EventCreate):
+    db_event = models.Event(**event.model_dump())
+    db.add(db_event)
+    db.commit()
+    db.refresh(db_event)
+    return db_event
+
+def get_events(db: Session):
+    return db.query(models.Event).all()
+
+# Purchases CRUD
+def create_purchase(db: Session, purchase: schemas.PurchaseCreate):
+    db_purchase = models.League(**purchase.model_dump())
+    db.add(db_purchase)
+    db.commit()
+    db.refresh(db_purchase)
+    return db_purchase
+    
+def get_purchases(db: Session):
+    return db.query(models.Purchase).all()

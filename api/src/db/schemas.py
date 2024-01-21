@@ -3,12 +3,12 @@ from datetime import date, datetime
 from typing import Annotated
 
 from fastapi import Depends, FastAPI
-from fastapi.security import OAuth2PasswordBearer
+# from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel, dataclasses
 
 app = FastAPI()
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 class UserBase(BaseModel):
@@ -33,30 +33,52 @@ class UserUpdate(UserBase):
     last_name: str | None = None
     password: str | None = None
 
-
-
-
+# League Schemas
 class LeagueBase(BaseModel):
-    name: str
+    description: str | None = None
 
 class LeagueCreate(LeagueBase):
-    description: str | None = None
+    name: str
     membership_cost: float
     drop_in_cost: float
     president_id: int
 
+class League(LeagueCreate):
+    id: int
 
-# def fake_decode_token(token):
-#     return User(
-#         username=token + "fakedecoded", email="john@example.com", full_name="John Doe"
-#     )
+class LeagueUpdate(LeagueBase):
+    id: int
+    name: str | None = None
+    membership_cost: float | None = None
+    drop_in_cost: float | None = None
+    president_id: int | None = None
 
+# Event Schemas
+class EventBase(BaseModel):
+    league_id: int
 
-# async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-#     user = fake_decode_token(token)
-#     return user
+class EventCreate(EventBase):
+    start_time: datetime
+    end_time: datetime
 
+class Event(EventCreate):
+    event_id: int
 
-# @app.get("/users/me")
-# async def read_users_me(current_user: Annotated[User, Depends(get_current_user)]):
-#     return current_user
+class EventUpdate(EventBase):
+    event_id: int
+    start_time: datetime | None = None
+    end_time: datetime | None = None
+    
+# Purchase Schemas
+class PurchaseBase(BaseModel):
+    event_id: int | None = None
+
+class PurchaseCreate(PurchaseBase):
+    user_id: int
+    league_id: int
+    date_time: datetime
+    payment_method: str
+    purchase_type: str
+
+class Pruchase(PurchaseCreate):
+    pruchase_id: int
