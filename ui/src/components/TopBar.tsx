@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Logo from '../logo.png';
+import Logo from '../dropn-logo-horiz-dark.png';
 import { Link } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -26,26 +26,11 @@ function TopBar() {
     return (
       <AppBar position="static" sx={{backgroundColor: "#282828"}}>
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="./"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontWeight: 500,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              Drop'n
-            </Typography>
-            
-            <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+            <Toolbar disableGutters>
+            <Link to="/">
+                <img src={Logo} alt="Logo" style={{ marginRight: '50px', width: '165px', height: '36px' }} />
+            </Link>
+        
             <Typography
               variant="h5"
               noWrap
@@ -70,7 +55,7 @@ function TopBar() {
                 <Button
                   key={page.name}
                   onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{ mx: 2, my: 2, color: 'white', display: 'block' }}
                 >
                   {page.name}
                 </Button>

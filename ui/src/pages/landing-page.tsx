@@ -20,6 +20,12 @@ function Landing() {
     event.preventDefault();
 
     if (email && password) {
+      // Prepare data to be sent in the POST request
+      const formData = {
+        email: email,
+        password: password,
+      };
+
       try {
         // Make a POST request using the fetch API
         const response = await fetch("http://localhost:8000/user", {
@@ -27,11 +33,9 @@ function Landing() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            email,
-            password,
-          }),
+          body: JSON.stringify(formData),
         });
+
         if (response.ok) {
           // Handle the response (e.g., redirect to dashboard on success)
           const responseData = await response.json();
