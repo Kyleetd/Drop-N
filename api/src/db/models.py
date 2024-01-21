@@ -12,8 +12,8 @@ class User(Base):
     last_name = Column(String)
     email = Column(String)
     password = Column(String)
-    phone_number = Column(Integer)
-    
+    phone_number = Column(Integer)  
+
 
 class League(Base):
     __tablename__ = "leagues"
@@ -49,3 +49,4 @@ class Purchase(Base):
 
     payment_method = Column(String)
     purchase_type = Column(String)
+
