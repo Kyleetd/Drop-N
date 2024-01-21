@@ -11,18 +11,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
+import TopBar from '../components/TopBar';
 
-const UserDashboard = () => {
+const Events = () => {
   return (
     <div className='Basic-Page'>
       
-        <AppBar position="static" sx={{backgroundColor: "#282828"}}>
-          <Toolbar>
-            <Typography variant="h6">
-              Events Dashboard
-            </Typography>
-          </Toolbar>
-        </AppBar>
+      <TopBar />
       
 
       <div style={{ margin: '20px' }}>
@@ -54,4 +49,4 @@ const UserDashboard = () => {
   );
 };
 
-export default UserDashboard;
+export default Events;
