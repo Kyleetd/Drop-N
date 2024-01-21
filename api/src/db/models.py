@@ -12,7 +12,7 @@ class User(Base):
     last_name = Column(String)
     email = Column(String)
     hashed_password = Column(String)
-    phone_number = Column(int)
+    phone_number = Column(Integer)
     
 
 class League(Base):
@@ -24,7 +24,7 @@ class League(Base):
     description = Column(String)
     membership_cost = Column(Numeric(precision=10, scale=2))
     drop_in_cost = Column(Numeric(precision=10, scale=2))
-    president_id = Column(int)
+    president_id = Column(Integer)
 
 
 class Event(Base):
@@ -32,14 +32,10 @@ class Event(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    league_id = Column(Integer, ForeignKey('leagues.id'), primary_key=True, index=True)
+    league_id = Column(Integer, ForeignKey('leagues.id'), index=True)
 
     start_time = Column(DateTime)
     end_time = Column(DateTime)
-
-    # Define a relationship with the League model
-    league = relationship("League", back_populates="events")
-
 
 class Purchase(Base):
     __tablename__ = "purchases"
@@ -52,13 +48,3 @@ class Purchase(Base):
 
     payment_method = Column(Enum('visa', 'mastercard', 'cash'))
     purchase_type = Column(Enum('league', 'event'))
-
-    # Define relationships
-    league = relationship("League", back_populates="purchases")
-    event = relationship("Event", back_populates="purchases")
-    user = relationship("User", back_populates="purchases")
-
-
-
-
-

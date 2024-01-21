@@ -1,4 +1,3 @@
-from argon2 import hash_password
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -6,40 +5,33 @@ from . import models, schemas
 def login(db: Session, email: str, password: str):
     return db.query(models.User).filter(models.User.email == email and models.User.hashed_password == password).first()
 
-def create_user(db: Session, user: schemas.User):
-    hashed_password = hash_password(user.password)
-    new_user = models.User(first_name=user.first_name, last_name=user.last_name, email=user.email, hashed_password=hashed_password, phone_number=user.phone_number)
-    return new_user
-
-
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
-
 
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
 
-
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
+    fake_hashed_password = user.hashed_password + "notreallyhashed"
     db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
     return db_user
 
-
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
-
-
-def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-    db_item = models.Item(**item.dict(), owner_id=user_id)
-    db.add(db_item)
+def update_user(db: Session, user: schemas.UserCreate):
+    db_user = db.query(models.User).filter(models.User.id == user.id).first()
+    if user.hash_password not in [None, ""]:
+        db_user.hash_password = user.hash_password + "notreallyhashed"
+    if user.first_name not in [None, ""]:
+        db_user.first_name = user.first_name
+    if user.last_name not in [None, ""]:
+        db_user.last_name = user.last_name
+    if user.email not in [None, ""]:
+        db_user.email = user.email
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    db.refresh(db_user)
+    return db_user

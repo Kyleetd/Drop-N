@@ -18,12 +18,24 @@ class UserBase(BaseModel):
 
 class User(UserBase):
     id: int
-    phone_number: int 
 
-class CreateUser(User):
+class UserCreate(UserBase):
     hashed_password: str
 
-# class LeagueBase(BaseModel):
+class LeagueBase(BaseModel):
+    name: str
+
+class League(LeagueBase):
+    description: str | None = None
+    id: int
+
+class UserUpdate(BaseModel):
+    id: int
+    email: str | None = None
+    first_name: str | None = None
+    last_name: str | None = None
+    hashed_password: str | None = None
+
 
 
 # def fake_decode_token(token):

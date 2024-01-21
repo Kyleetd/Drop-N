@@ -19,6 +19,8 @@ def get_db():
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+models.Base.metadata.create_all(bind=engine)
+
 # TODO Authentication
 # getter for authentication process
 # @app.get("/user/")
@@ -38,8 +40,30 @@ async def login(email: str, password: str, db: Session = Depends(get_db)):
 
 ## Create new user
 @app.post("/user/new")
-async def login(user: schemas.User, db: Session = Depends(get_db)):
-    user = crud.create_user(user)
+async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    new_user = crud.create_user(db, user)
+    return new_user
+
+## Update user
+@app.put("/user")
+async def update_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    updated_user = crud.update_user(db, user)
+    return update_user
+
+## Get All Users
+@app.get("/users")
+async def get_users(db: Session = Depends(get_db)):
+    users = crud.get_users(db)
+    return users
+
+## Get User by email
+@app.get("/user/email/{email}")
+async def get_user_by_email(email: str, db: Session = Depends(get_db)):
+    user = crud.get_user_by_email(db, email)
     return user
 
-##
+## Get User by id
+@app.get("/user/id/{id}")
+async def get_user_by_id(id: int, db: Session = Depends(get_db)):
+    user = crud.get_user(db, id)
+    return user
