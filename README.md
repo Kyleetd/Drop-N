@@ -1,4 +1,4 @@
-<p align="center"><img width="128" src="./ui/src/logo.png"></p>
+<p align="center"><img width="128" src="./ui/src/dropn-logo-dark.png"></p>
 
 <h1 align="center">Drop'n</h1>
 
