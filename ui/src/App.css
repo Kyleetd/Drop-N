@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.Basic-Page {
+  min-height: 100vh;
+  background-color: #191d24;
+}

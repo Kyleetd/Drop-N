@@ -1,30 +1,53 @@
 import React from 'react';
+import logo from '../logo.png';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import '../App.css';
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { CardActionArea } from '@mui/material';
 
 const UserDashboard = () => {
   return (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">
-            UBC Volleyball Club Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
+    <div className='Basic-Page'>
+      
+        <AppBar position="static" sx={{backgroundColor: "#282828"}}>
+          <Toolbar>
+            <Typography variant="h6">
+              Events Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      
 
       <div style={{ margin: '20px' }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h4" gutterBottom sx={{color: "white"}}>
           Upcoming Events
         </Typography>
 
-        {/* Placeholder for upcoming events */}
         <div>
-          <Typography>Event 1</Typography>
-          <Typography>Event 2</Typography>
-          <Typography>Event 3</Typography>
-          {/* Add more placeholders or map through an events array */}
+        <Card sx={{ maxWidth: 345 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="140"
+              image=""
+              alt="event"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Sample event 1
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget ultricies aliquam, nunc nisl ultrices nunc, eget ultricies nisl nisl eget nisl.
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
         </div>
       </div>
     </div>
