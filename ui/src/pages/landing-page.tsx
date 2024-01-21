@@ -7,7 +7,10 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-function Landing() {
+const Landing: React.FC<{
+  currentUserId: string | null;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ currentUserId, setCurrentUserId }) => {
   // State to store user input
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
@@ -123,6 +126,6 @@ function Landing() {
       </header>
     </div>
   );
-}
+};
 
 export default Landing;
