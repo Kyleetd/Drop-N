@@ -47,7 +47,7 @@ models.Base.metadata.create_all(bind=engine)
 async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_db)):
     db_user = crud.login(db, email=credentials.email, password=credentials.password)
     if db_user:
-        return db_user
+        return db_user.id
     else:
         raise HTTPException(status_code=422, detail="Invalid login")
 
@@ -55,7 +55,7 @@ async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_
 @app.post("/user/new")
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     new_user = crud.create_user(db, user)
-    return new_user
+    return new_user.id
 
 ## Update user
 @app.put("/user")

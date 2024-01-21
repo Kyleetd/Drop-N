@@ -89,6 +89,8 @@ const FormPropsTextFields: React.FC<{
         const responseData = await response.json();
         console.log("User created successfully:", responseData);
         setApiError(null);
+        const userId = responseData.id;
+        setCurrentUserId(userId);
         navigate("/dashboard");
       } else {
         // Handle non-successful responses

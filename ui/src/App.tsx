@@ -17,21 +17,27 @@ function App() {
           path="/"
           element={
             <Landing
+              currentUserId={currentUserId}
+              setCurrentUserId={setCurrentUserId}
             />
           }
         />
+
         <Route
           path="/events"
           element={<Events currentUserId={currentUserId} />}
         />
+
         <Route
           path="/memberships"
           element={<Memberships currentUserId={currentUserId} />}
         />
+
         <Route
           path="/purchases"
           element={<Purchases currentUserId={currentUserId} />}
         />
+
         <Route
           path="/new-user"
           element={

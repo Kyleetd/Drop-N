@@ -7,7 +7,10 @@ import AlertTitle from "@mui/material/AlertTitle";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-function Landing(props: any) {
+const Landing: React.FC<{
+  currentUserId: string | null;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ currentUserId, setCurrentUserId }) => {
   // State to store user input
   const [email, setemail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,8 +28,6 @@ function Landing(props: any) {
       password: password,
     });
 
-    console.log(formData);
-
     try {
       // Make a POST request using the fetch API
       const response = await fetch("http://localhost:8001/user", {
@@ -39,9 +40,10 @@ function Landing(props: any) {
 
       if (response.ok) {
         // Handle the response (e.g., redirect to dashboard on success)
-        console.log();
+        console.log("User retrieved successfully:", response);
         const responseData = await response.json();
-        console.log(responseData);
+        const userId = responseData.id;
+        setCurrentUserId(userId);
         navigate("/dashboard");
       } else {
         const errorData = await response.json();
@@ -120,6 +122,6 @@ function Landing(props: any) {
       </header>
     </div>
   );
-}
+};
 
 export default Landing;
