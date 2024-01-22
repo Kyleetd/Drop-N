@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import jwt from "jsonwebtoken";
 import Landing from "./pages/landing-page";
 import Events from "./pages/events";
 import Memberships from "./pages/memberships";
@@ -8,7 +9,28 @@ import Purchases from "./pages/purchases";
 import FormPropsTextFields from "./pages/new-user";
 
 function App() {
-  const [currentUserId, setCurrentUserId] = React.useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = React.useState<number | null>(null);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("authToken");
+
+  //   if (token) {
+  //     try {
+  //       // Secret key used on the server
+  //       const decodedToken = jwt.verify(token, "potato");
+
+  //       // Extract user ID from the decoded token
+  //       const userId =
+  //         typeof decodedToken.sub === "number" ? decodedToken.sub : null;
+
+  //       // Set the user ID in the component state
+  //       setCurrentUserId(userId);
+  //     } catch (error) {
+  //       // Handle token verification error
+  //       console.error("Error decoding token:", (error as Error).message);
+  //     }
+  //   }
+  // }, []);
 
   return (
     <Router>

@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 const FormPropsTextFields: React.FC<{
-  currentUserId: string | null;
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
+  currentUserId: number | null;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<number | null>>;
 }> = ({ currentUserId, setCurrentUserId }) => {
   const [firstName, setFirstName] = React.useState("");
   const [lastName, setLastName] = React.useState("");

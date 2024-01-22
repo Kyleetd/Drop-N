@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import "../App.css";
 import TopBar from "../components/TopBar";
 
-const Purchases = ({ currentUserId }: { currentUserId: string | null }) => {
+const Purchases = ({ currentUserId }: { currentUserId: number | null }) => {
   console.log(currentUserId);
 
   return (

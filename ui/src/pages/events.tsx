@@ -13,7 +13,7 @@ import { CardActionArea } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import TopBar from "../components/TopBar";
 
-const Events = ({ currentUserId }: { currentUserId: string | null }) => {
+const Events = ({ currentUserId }: { currentUserId: number | null }) => {
   return (
     <div className="Basic-Page">
       <TopBar />

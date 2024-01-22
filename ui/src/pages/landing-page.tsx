@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 const Landing: React.FC<{
-  currentUserId: string | null;
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string | null>>;
+  currentUserId: number | null;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<number | null>>;
 }> = ({ currentUserId, setCurrentUserId }) => {
   // State to store user input
   const [email, setemail] = useState("");
@@ -39,11 +39,25 @@ const Landing: React.FC<{
       });
 
       if (response.ok) {
-        // Handle the response (e.g., redirect to dashboard on success)
-        console.log("User retrieved successfully:", response);
         const responseData = await response.json();
+        const token = responseData.access_token;
+        localStorage.setItem("authToken", token);
+
+        // Use this token in headers for subsequent requests
+        const authenticatedResponse = await fetch(
+          "http://localhost:8001/some-protected-endpoint",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
         const userId = responseData.id;
         setCurrentUserId(userId);
+
+        // Redirect to dashboard on success)
         navigate("/dashboard");
       } else {
         const errorData = await response.json();

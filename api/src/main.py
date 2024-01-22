@@ -8,9 +8,15 @@ from fastapi.security import OAuth2PasswordBearer
 from .db import crud, models, schemas
 from .db.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
+import jwt
+from fastapi import Depends
+
+SECRET_KEY = "potato"
+ALGORITHM = "HS256"
 
 app = FastAPI()
 
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],#["http://localhost:3001", "http://localhost:3000"],
@@ -37,17 +43,39 @@ models.Base.metadata.create_all(bind=engine)
 # async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
 #     return {"token": token}
 
-# @app.get("/users/me")
-# async def read_users_me(current_user: Annotated[schemas.User, Depends(schemas.get_current_user)]):
-#     return current_user
+# Dependency for token verification
+# Verifies the authenticity of JWT token & extracts the user's id from the token payload
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+        return user_id
+    except jwt.ExpiredSignatureError:
+        raise credentials_exception
+    except jwt.InvalidTokenError:
+        raise credentials_exception
 
+# ID of the authenticated user is then returned in the response 
+@app.get("/users/me")
+async def read_users_me(current_user_id: int = Depends(get_current_user)):
+    return {"current_user_id": current_user_id}
 
 ## Log user in
 @app.post("/user")
 async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_db)):
     db_user = crud.login(db, email=credentials.email, password=credentials.password)
     if db_user:
-        return db_user.id
+        # Generate JWT token
+        token_data = {"sub": db_user.email}
+        token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+        return {"access_token": token, "token_type": "bearer"}
     else:
         raise HTTPException(status_code=422, detail="Invalid login")
 
