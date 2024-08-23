@@ -2,28 +2,35 @@ from datetime import date, datetime
 from typing import Union, Annotated
 from sqlalchemy.orm import Session
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Depends
 from fastapi.security import OAuth2PasswordBearer
 
 from .db import crud, models, schemas
 from .db.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
-import jwt
-from fastapi import Depends
 
-SECRET_KEY = "potato"
-ALGORITHM = "HS256"
+from jwt import encode
+import logging
+
+logging.basicConfig(level=logging.INFO) 
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-# CORS
+# Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],#["http://localhost:3001", "http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001"
+    ],
     allow_credentials=True,
-    allow_methods=["*"],     
-    allow_headers=["*"],   
+    allow_methods=["*"],  # Allows all HTTP methods
+    allow_headers=["*"],  # Allows all headers
 )
+
+SECRET_KEY = "potato"
+ALGORITHM = "HS256"
 
 # Dependency
 def get_db():
@@ -35,82 +42,72 @@ def get_db():
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-models.Base.metadata.create_all(bind=engine)
+# Endpoints for users
 
-# TODO Authentication
-# getter for authentication process
-# @app.get("/user/")
-# async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
-#     return {"token": token}
+# # Verifies the authenticity of JWT token & extracts the user's id from the token payload
+# def get_current_user(token: str = Depends(oauth2_scheme)):
+#     credentials_exception = HTTPException(
+#         status_code=401,
+#         detail="Could not validate credentials",
+#         headers={"WWW-Authenticate": "Bearer"},
+#     )
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         user_id: int = payload.get("sub")
+#         if user_id is None:
+#             raise credentials_exception
+#         return user_id
+#     except jwt.ExpiredSignatureError:
+#         raise credentials_exception
+#     except jwt.InvalidTokenError:
+#         raise credentials_exception
 
-# Dependency for token verification
-# Verifies the authenticity of JWT token & extracts the user's id from the token payload
-def get_current_user(token: str = Depends(oauth2_scheme)):
-    credentials_exception = HTTPException(
-        status_code=401,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id: int = payload.get("sub")
-        if user_id is None:
-            raise credentials_exception
-        return user_id
-    except jwt.ExpiredSignatureError:
-        raise credentials_exception
-    except jwt.InvalidTokenError:
-        raise credentials_exception
-
-# ID of the authenticated user is then returned in the response 
-@app.get("/users/me")
-async def read_users_me(current_user_id: int = Depends(get_current_user)):
-    return {"current_user_id": current_user_id}
-
-## Log user in
+# # ID of the authenticated user is then returned in the response 
+# @app.get("/users/me")
+# async def read_users_me(current_user_id: int = Depends(get_current_user)):
+#     return {"current_user_id": current_user_id}
+    
 @app.post("/user")
 async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_db)):
     db_user = crud.login(db, email=credentials.email, password=credentials.password)
     if db_user:
         # Generate JWT token
         token_data = {"sub": db_user.email}
-        token = jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
-        return {"access_token": token, "token_type": "bearer"}
+        token = encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "id": db_user.id  
+        }
     else:
         raise HTTPException(status_code=422, detail="Invalid login")
 
-## Create new user
 @app.post("/user/new")
 async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     new_user = crud.create_user(db, user)
     return new_user.id
 
-## Update user
 @app.put("/user")
 async def update_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     updated_user = crud.update_user(db, user)
     return updated_user
 
-## Get All Users
 @app.get("/users")
 async def get_users(db: Session = Depends(get_db)):
     users = crud.get_users(db)
     return users
 
-## Get User by email
 @app.get("/user/email/{email}")
 async def get_user_by_email(email: str, db: Session = Depends(get_db)):
     user = crud.get_user_by_email(db, email)
     return user
 
-## Get User by id
 @app.get("/user/id/{id}")
 async def get_user_by_id(id: int, db: Session = Depends(get_db)):
     user = crud.get_user(db, id)
     return user
 
-
-# endpoints for leagues
+# Endpoints for leagues
 @app.get("/leagues")
 async def get_leagues(db: Session = Depends(get_db)):
     leagues = crud.get_leagues(db)
@@ -170,13 +167,13 @@ async def get_purchases(db: Session = Depends(get_db)):
 
 @app.get("/purchases/{customer_id}/{date}")
 async def get_purchases(customer_id: int, date: date, db: Session = Depends(get_db)):
-    purchases = crud.get_customer_pruchases(db, customer_id, date)
+    purchases = crud.get_customer_purchases(db, customer_id, date)
     return purchases
 
 @app.post("/purchase")
-async def create_pruchase(pruchase: schemas.PurchaseCreate, db: Session = Depends(get_db)):
-    new_pruchase = crud.create_purchase(db, pruchase)
-    return new_pruchase
+async def create_purchase(purchase: schemas.PurchaseCreate, db: Session = Depends(get_db)):
+    new_purchase = crud.create_purchase(db, purchase)
+    return new_purchase
 
 # @app.put("/pruchase")
 # async def update_pruchase(pruchase: schemas.PurchaseUpdate, db: Session = Depends(get_db)):

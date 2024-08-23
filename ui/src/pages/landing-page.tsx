@@ -57,7 +57,7 @@ const Landing: React.FC<{
         const userId = responseData.id;
         setCurrentUserId(userId);
 
-        // Redirect to dashboard on success)
+        // Redirect to dashboard on success
         navigate("/dashboard");
       } else {
         const errorData = await response.json();
