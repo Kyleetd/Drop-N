@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "../logo.png";
+import logo from "../assets/logo.png";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
@@ -96,7 +96,9 @@ const Landing: React.FC<{
               label="Email"
               variant="outlined"
               value={email}
-              onChange={(e) => setemail(e.target.value)}
+              onChange={(e: { target: { value: any } }) =>
+                setemail(e.target.value)
+              }
               autoFocus={true}
               InputLabelProps={{
                 style: { color: "#1976d2" },
@@ -109,7 +111,9 @@ const Landing: React.FC<{
               label="Password"
               variant="outlined"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e: { target: { value: any } }) =>
+                setPassword(e.target.value)
+              }
               type="password"
               InputLabelProps={{
                 style: { color: "#1976d2" },
