@@ -174,8 +174,3 @@ async def get_purchases(customer_id: int, date: date, db: Session = Depends(get_
 async def create_purchase(purchase: schemas.PurchaseCreate, db: Session = Depends(get_db)):
     new_purchase = crud.create_purchase(db, purchase)
     return new_purchase
-
-# @app.put("/pruchase")
-# async def update_pruchase(pruchase: schemas.PurchaseUpdate, db: Session = Depends(get_db)):
-#     updated_pruchase = crud.update_event(db, pruchase)
-#     return updated_pruchase

@@ -31,7 +31,7 @@ const Landing: React.FC<{
     try {
       // Make a POST request using the fetch API
       const response = await fetch("http://localhost:8001/user", {
-        method: "Post",
+        method: "post",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,22 +43,11 @@ const Landing: React.FC<{
         const token = responseData.access_token;
         localStorage.setItem("authToken", token);
 
-        // Use this token in headers for subsequent requests
-        const authenticatedResponse = await fetch(
-          "http://localhost:8001/some-protected-endpoint",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
         const userId = responseData.id;
         setCurrentUserId(userId);
 
-        // Redirect to dashboard on success
-        navigate("/dashboard");
+        // Redirect to leagues on success
+        navigate("/leagues");
       } else {
         const errorData = await response.json();
         setError(errorData.detail);

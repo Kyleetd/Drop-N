@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import Landing from "./pages/landing-page";
-import Events from "./pages/events";
+import Leagues from "./pages/leagues";
 import Memberships from "./pages/memberships";
 import Purchases from "./pages/purchases";
 import FormPropsTextFields from "./pages/new-user";
@@ -46,8 +46,8 @@ function App() {
         />
 
         <Route
-          path="/events"
-          element={<Events currentUserId={currentUserId} />}
+          path="/leagues"
+          element={<Leagues currentUserId={currentUserId} />}
         />
 
         <Route
