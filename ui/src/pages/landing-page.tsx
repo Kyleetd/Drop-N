@@ -46,14 +46,12 @@ const Landing: React.FC<{
         const userId = responseData.id;
         setCurrentUserId(userId);
 
-        // Redirect to leagues on success
         navigate("/leagues");
       } else {
         const errorData = await response.json();
         setError(errorData.detail);
       }
     } catch (error) {
-      // Handle network or other errors
       console.error("Login failed", error);
       setError("An unexpected error occurred.");
     }

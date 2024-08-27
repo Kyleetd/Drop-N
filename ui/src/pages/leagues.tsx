@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import TopBar from "../components/TopBar";
 
@@ -19,23 +15,25 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchLeagues = async () => {
       try {
-        const response = await fetch("http://localhost:8001/leagues"); // Adjust the URL if necessary
+        const response = await fetch("http://localhost:8001/leagues");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setLeagues(data); // Update state with fetched leagues
+        setLeagues(data);
       } catch (error: unknown) {
         if (error instanceof Error) {
-          setError(error.message); // Update state with error message
+          setError(error.message);
         } else {
-          setError("An unknown error occurred"); // Fallback error message
+          setError("An unknown error occurred");
         }
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
@@ -64,7 +62,7 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
             color="primary"
             startIcon={<AddIcon />}
             style={{ marginLeft: "16px" }}
-            onClick={() => alert("Add new league functionality goes here")}
+            onClick={() => navigate("/new-league")}
           >
             New League
           </Button>

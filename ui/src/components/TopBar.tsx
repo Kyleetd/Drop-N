@@ -8,12 +8,11 @@ import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
-import AdbIcon from "@mui/icons-material/Adb";
 
 const pages = [
   { name: "Events", path: "/events" },
-  { name: "Memberships", path: "/memberships" },
-  { name: "Purchases", path: "/purchases" },
+  { name: "Leagues", path: "/leagues" },
+  { name: "Profile", path: "/profile" },
 ];
 
 function TopBar() {
@@ -61,7 +60,11 @@ function TopBar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link to={page.path} style={{ textDecoration: "none" }}>
+              <Link
+                to={page.path}
+                key={page.name}
+                style={{ textDecoration: "none" }}
+              >
                 <Button
                   key={page.name}
                   onClick={handleCloseNavMenu}

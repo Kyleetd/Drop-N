@@ -2,4 +2,4 @@
 
 <h1 align="center">Drop'n</h1>
 
-Nw Hacks Project using Fast API and SQAlchemy for the backend and React front-end.
+Nw Hacks Project using Fast API and SQAlchemy for the back-end and React for the front-end.

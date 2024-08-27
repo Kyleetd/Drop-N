@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import jwt from "jsonwebtoken";
 import Landing from "./pages/landing-page";
 import Leagues from "./pages/leagues";
+import NewLeague from "./pages/new-league";
 import Memberships from "./pages/memberships";
 import Purchases from "./pages/purchases";
 import FormPropsTextFields from "./pages/new-user";
@@ -48,6 +49,11 @@ function App() {
         <Route
           path="/leagues"
           element={<Leagues currentUserId={currentUserId} />}
+        />
+
+        <Route
+          path="/new-league"
+          element={<NewLeague currentUserId={currentUserId} />}
         />
 
         <Route
