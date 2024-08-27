@@ -33,7 +33,7 @@ const NewLeague = ({ currentUserId }: { currentUserId: number | null }) => {
         president_id: currentUserId,
       };
 
-      const response = await fetch("http://localhost:8001/leagues", {
+      const response = await fetch("http://localhost:8001/league", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -99,6 +99,7 @@ const NewLeague = ({ currentUserId }: { currentUserId: number | null }) => {
           <TextField
             id="membershipCost"
             label="Membership cost"
+            type="number"
             variant="filled"
             value={formData.membershipCost}
             onChange={handleInputChange}
@@ -106,6 +107,7 @@ const NewLeague = ({ currentUserId }: { currentUserId: number | null }) => {
           <TextField
             id="dropInCost"
             label="Drop-in cost"
+            type="number"
             variant="filled"
             value={formData.dropInCost}
             onChange={handleInputChange}

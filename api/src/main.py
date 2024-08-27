@@ -123,7 +123,7 @@ async def get_leagues_by_key_word(key_word: str, db: Session = Depends(get_db)):
     leagues = crud.get_leagues_by_key_word(db, key_word)
     return leagues
 
-@app.post("/leagues")
+@app.post("/league")
 async def create_league(league: schemas.LeagueCreate, db: Session = Depends(get_db)):
     new_league = crud.create_league(db, league)
     return new_league
@@ -132,6 +132,11 @@ async def create_league(league: schemas.LeagueCreate, db: Session = Depends(get_
 async def update_league(league: schemas.LeagueUpdate, db: Session = Depends(get_db)):
     updated_league = crud.update_league(db, league)
     return updated_league
+
+@app.delete("/league/{id}")
+async def delete_league(id: int, db: Session = Depends(get_db)):
+    deleted_league = crud.delete_league(db, id)
+    return deleted_league
 
 # Endpoints for events
 @app.get("/events")

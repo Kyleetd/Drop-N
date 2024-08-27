@@ -40,6 +40,27 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
     fetchLeagues();
   }, []);
 
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8001/league/${id}`, {
+        method: "DELETE",
+      });
+
+      console.log(`ID: ${id}, Type: ${typeof id}`);
+
+      if (response.ok) {
+        setLeagues((prevLeagues: any) =>
+          prevLeagues.filter((league: any) => league.id !== id)
+        );
+      } else {
+        const errorText = await response.text();
+        console.error(`Failed to delete league: ${errorText}`);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
@@ -94,6 +115,15 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
                     endIcon={<SendIcon />}
                   >
                     Drop'n
+                  </Button>
+                  <Button
+                    size="small"
+                    color="error"
+                    variant="contained"
+                    style={{ marginTop: "8px" }}
+                    onClick={() => handleDelete(league.id)}
+                  >
+                    Delete
                   </Button>
                 </div>
               </div>

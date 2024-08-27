@@ -1,3 +1,4 @@
+from fastapi import HTTPException, status 
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -47,6 +48,26 @@ def create_league(db: Session, league: schemas.LeagueCreate):
 
 def get_leagues(db: Session):
     return db.query(models.League).all()
+
+def delete_league(db: Session, id: int):
+    league = db.query(models.League).filter(models.League.id == id).first()
+
+    if not league:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="League not found"
+        )
+
+    try:
+        db.delete(league)
+        db.commit()
+        return
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error deleting League: {str(e)}"
+        )
 
 # Events CRUD
 def create_event(db: Session, event: schemas.EventCreate):

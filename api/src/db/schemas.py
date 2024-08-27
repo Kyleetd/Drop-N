@@ -54,6 +54,9 @@ class LeagueUpdate(LeagueBase):
     drop_in_cost: float | None = None
     president_id: int | None = None
 
+class LeagueDelete(LeagueCreate):
+    id: int
+
 # Event Schemas
 class EventBase(BaseModel):
     league_id: int
