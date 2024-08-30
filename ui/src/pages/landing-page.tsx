@@ -18,18 +18,15 @@ const Landing: React.FC<{
 
   const navigate = useNavigate();
 
-  // Handler for when the user submits the form
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // Prepare data to be sent in the POST request
     const formData = JSON.stringify({
       email: email,
       password: password,
     });
 
     try {
-      // Make a POST request using the fetch API
       const response = await fetch("http://localhost:8001/user", {
         method: "post",
         headers: {

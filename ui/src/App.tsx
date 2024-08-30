@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import jwt from "jsonwebtoken";
+import { jwtDecode } from "jwt-decode";
 import Landing from "./pages/landing-page";
 import Leagues from "./pages/leagues";
 import NewLeague from "./pages/new-league";
@@ -10,28 +10,33 @@ import Purchases from "./pages/purchases";
 import FormPropsTextFields from "./pages/new-user";
 
 function App() {
-  const [currentUserId, setCurrentUserId] = React.useState<number | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem("authToken");
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
 
-  //   if (token) {
-  //     try {
-  //       // Secret key used on the server
-  //       const decodedToken = jwt.verify(token, "potato");
+    if (token) {
+      try {
+        const decodedToken: { sub: number } = jwtDecode(token);
 
-  //       // Extract user ID from the decoded token
-  //       const userId =
-  //         typeof decodedToken.sub === "number" ? decodedToken.sub : null;
+        // Extract user ID from the decoded token
+        const userId =
+          typeof decodedToken.sub === "number" ? decodedToken.sub : null;
 
-  //       // Set the user ID in the component state
-  //       setCurrentUserId(userId);
-  //     } catch (error) {
-  //       // Handle token verification error
-  //       console.error("Error decoding token:", (error as Error).message);
-  //     }
-  //   }
-  // }, []);
+        setCurrentUserId(userId);
+      } catch (error) {
+        console.error("Error decoding token:", (error as Error).message);
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("currentUserId");
+      }
+    } else {
+      // Retrieve userId from localStorage if available
+      const savedUserId = localStorage.getItem("currentUserId");
+      if (savedUserId) {
+        setCurrentUserId(Number(savedUserId));
+      }
+    }
+  }, []);
 
   return (
     <Router>

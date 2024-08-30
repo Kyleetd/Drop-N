@@ -9,11 +9,13 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import SendIcon from "@mui/icons-material/Send";
 import TopBar from "../components/TopBar";
+import { Alert, Snackbar } from "@mui/material";
 
 const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
   const [leagues, setLeagues] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [warningOpen, setWarningOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,17 +42,25 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
     fetchLeagues();
   }, []);
 
-  const handleDelete = async (id: number) => {
-    try {
-      const response = await fetch(`http://localhost:8001/league/${id}`, {
-        method: "DELETE",
-      });
+  const handleDelete = async (league_to_delete: any) => {
+    if (currentUserId != league_to_delete.president_id) {
+      setWarningOpen(true);
+      return;
+    }
 
-      console.log(`ID: ${id}, Type: ${typeof id}`);
+    try {
+      const response = await fetch(
+        `http://localhost:8001/league/${league_to_delete.id}?`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      console.log(`USER IS : ${currentUserId}`);
 
       if (response.ok) {
         setLeagues((prevLeagues: any) =>
-          prevLeagues.filter((league: any) => league.id !== id)
+          prevLeagues.filter((league: any) => league.id !== league_to_delete.id)
         );
       } else {
         const errorText = await response.text();
@@ -59,6 +69,10 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
     } catch (error) {
       console.error("Error:", error);
     }
+  };
+
+  const handleCloseWarning = () => {
+    setWarningOpen(false);
   };
 
   if (loading) return <Typography>Loading...</Typography>;
@@ -121,7 +135,7 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
                     color="error"
                     variant="contained"
                     style={{ marginTop: "8px" }}
-                    onClick={() => handleDelete(league.id)}
+                    onClick={() => handleDelete(league)}
                   >
                     Delete
                   </Button>
@@ -131,6 +145,19 @@ const Leagues = ({ currentUserId }: { currentUserId: number | null }) => {
           ))}
         </div>
       </div>
+      <Snackbar
+        open={warningOpen}
+        autoHideDuration={6000}
+        onClose={handleCloseWarning}
+      >
+        <Alert
+          onClose={handleCloseWarning}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          Only the president can delete the league!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

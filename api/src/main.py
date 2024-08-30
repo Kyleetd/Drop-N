@@ -1,4 +1,5 @@
 from datetime import date, datetime
+import os
 from typing import Union, Annotated
 from sqlalchemy.orm import Session
 
@@ -9,11 +10,14 @@ from .db import crud, models, schemas
 from .db.database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
 
-from jwt import encode
+from jwt import ExpiredSignatureError, InvalidTokenError, decode, encode
 import logging
 
 logging.basicConfig(level=logging.INFO) 
 models.Base.metadata.create_all(bind=engine)
+
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback_secret_if_not_set")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 
 app = FastAPI()
 
@@ -29,9 +33,6 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-SECRET_KEY = "potato"
-ALGORITHM = "HS256"
-
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -43,36 +44,31 @@ def get_db():
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Endpoints for users
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=401,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+        return user_id
+    except (ExpiredSignatureError, InvalidTokenError):
+        raise credentials_exception
 
-# # Verifies the authenticity of JWT token & extracts the user's id from the token payload
-# def get_current_user(token: str = Depends(oauth2_scheme)):
-#     credentials_exception = HTTPException(
-#         status_code=401,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#     try:
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         user_id: int = payload.get("sub")
-#         if user_id is None:
-#             raise credentials_exception
-#         return user_id
-#     except jwt.ExpiredSignatureError:
-#         raise credentials_exception
-#     except jwt.InvalidTokenError:
-#         raise credentials_exception
+@app.get("/users/me")
+async def read_users_me(current_user_id: int = Depends(get_current_user)):
+    return {"current_user_id": current_user_id}
 
-# # ID of the authenticated user is then returned in the response 
-# @app.get("/users/me")
-# async def read_users_me(current_user_id: int = Depends(get_current_user)):
-#     return {"current_user_id": current_user_id}
-    
 @app.post("/user")
 async def login(credentials: schemas.UserCredentials, db: Session = Depends(get_db)):
     db_user = crud.login(db, email=credentials.email, password=credentials.password)
     if db_user:
         # Generate JWT token
-        token_data = {"sub": db_user.email}
+        token_data = {"sub": db_user.id}
         token = encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
         return {
             "access_token": token,
