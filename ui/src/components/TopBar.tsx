@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Logo from "../assets/dropn-logo-horiz-dark.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -20,12 +20,21 @@ function TopBar() {
     null
   );
 
+  const navigate = useNavigate();
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("currentUserId");
+
+    navigate("/");
   };
 
   return (
@@ -74,6 +83,15 @@ function TopBar() {
                 </Button>
               </Link>
             ))}
+          </Box>
+          <Box sx={{ flexGrow: 0 }}>
+            <Button
+              color="inherit"
+              onClick={handleLogout}
+              sx={{ marginLeft: "auto", color: "white" }}
+            >
+              Logout
+            </Button>
           </Box>
         </Toolbar>
       </Container>

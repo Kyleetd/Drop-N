@@ -30,7 +30,6 @@ function App() {
         localStorage.removeItem("currentUserId");
       }
     } else {
-      // Retrieve userId from localStorage if available
       const savedUserId = localStorage.getItem("currentUserId");
       if (savedUserId) {
         setCurrentUserId(Number(savedUserId));
