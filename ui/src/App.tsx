@@ -8,6 +8,7 @@ import NewLeague from "./pages/new-league";
 import Memberships from "./pages/memberships";
 import Purchases from "./pages/purchases";
 import FormPropsTextFields from "./pages/new-user";
+import Profile from "./pages/profile";
 
 function App() {
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
@@ -78,6 +79,11 @@ function App() {
               setCurrentUserId={setCurrentUserId}
             />
           }
+        />
+
+        <Route
+          path="/profile"
+          element={<Profile currentUserId={currentUserId} />}
         />
       </Routes>
     </Router>
